@@ -1,0 +1,49 @@
+greeting:
+  message: "hello"
+
+quarkus:
+  application:
+    name: quarkus-api
+  
+  # HTTP Configuration
+  http:
+    port: 8080
+    cors:
+      ~: true
+      origins: "*"
+      methods: GET,POST,PUT,DELETE,OPTIONS
+      headers: Accept,Authorization,Content-Type,Origin,X-Requested-With
+      exposed-headers: Content-Disposition
+      access-control-max-age: 24H
+  
+  # Database Configuration
+  datasource:
+    db-kind: postgresql
+    username: postgres
+    password: postgres
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/postgres
+      max-size: 16
+  
+  # Hibernate Configuration
+  hibernate-orm:
+    database:
+      generation: none
+    log:
+      sql: true
+      bind-parameters: true
+    physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
+  
+  # Development Configuration
+  log:
+    category:
+      "org.hibernate.SQL":
+        level: DEBUG
+      "org.hibernate.type.descriptor.sql":
+        level: DEBUG
+        min-level: TRACE
+  
+  # OpenAPI Configuration
+  swagger-ui:
+    always-include: true
+    path: /swagger-ui
