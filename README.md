@@ -5,9 +5,9 @@ A fullstack project template using Supabase for authentication, Quarkus for the 
 ## Project Structure
 
 - `/docker` - Docker setup for Supabase services (PostgreSQL, Kong, Auth)
-  - `/docker/migrations` - Flyway migrations for Supabase Auth schema
   - `/docker/kong` - Kong API Gateway configuration
 - `/backend` - Quarkus API (Kotlin + Gradle)
+  - `/backend/src/main/resources/db/migration` - Flyway database migrations
 - `/frontend` - Frontend application (TODO)
 
 ## Prerequisites
@@ -57,4 +57,4 @@ cd backend
 
 ### Database Migrations
 
-Database migrations are handled by Flyway and will run automatically when the Docker containers start up. The migrations are located in `/docker/migrations/`. 
+Database migrations are handled by Flyway and are now managed by the API container. The migrations are located in `/backend/src/main/resources/db/migration/` and will run automatically when the API container starts up. 
