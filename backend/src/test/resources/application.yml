@@ -1,26 +1,28 @@
 quarkus:
-  # Test profile specific configuration
+  # Test profile configuration
   profile: test
+  http:
+    test-port: 0
   
   # Flyway Configuration for tests
   flyway:
     migrate-at-start: true
-    clean-at-start: true
     locations: db/migration
-    schemas: auth, public
-  
-  # Hibernate Configuration for tests
-  hibernate-orm:
-    database:
-      generation: validate
+    schemas: public, auth
+    default-schema: public
   
   # Datasource configuration
   datasource:
     devservices:
       enabled: true
-      show-logs: true
-      shutdown-strategy: stop
-    db-kind: postgresql
+      port: 5432
     jdbc:
       max-size: 16
+
+# Supabase JWT configuration for tests
+supabase:
+  jwt:
+    issuer: test-issuer
+    secret: dGVzdC1zZWNyZXQtZm9yLWp3dC1zaWduaW5nLWluLXRlc3RzLW9ubHktbm90LWZvci1wcm9k # Base64 encoded "test-secret-for-jwt-signing-in-tests-only-not-for-prod"
+    realm: Test API
 
