@@ -60,3 +60,8 @@ tasks.withType<org.jetbrains.kotlin.gradle.tasks.KotlinCompile> {
     kotlinOptions.jvmTarget = JavaVersion.VERSION_21.toString()
     kotlinOptions.javaParameters = true
 }
+
+tasks.test {
+    // This ensures tests run sequentially in a single fork
+    maxParallelForks = 1
+}

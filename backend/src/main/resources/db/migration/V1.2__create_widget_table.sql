@@ -1,6 +1,4 @@
 -- Create public schema
-CREATE SCHEMA IF NOT EXISTS public;
-
 CREATE TABLE public.widget (
     id VARCHAR(26) PRIMARY KEY,
     user_id UUID NOT NULL,

@@ -18,13 +18,7 @@ import org.junit.jupiter.api.Test
 import java.util.UUID
 
 @QuarkusTest
-@TestInstance(TestInstance.Lifecycle.PER_CLASS)
 class WidgetControllerTest : BaseAuthenticatedTest() {
-
-    @BeforeEach
-    fun initializeTestData() {
-        ensureTestUsers()
-    }
 
     @Test
     fun `should create widget when authenticated`() {
@@ -34,7 +28,7 @@ class WidgetControllerTest : BaseAuthenticatedTest() {
             level = 1
         )
 
-        givenAuth()
+        givenAuth(TestJwtGenerator.TEST_USER_ID)
             .body(request)
             .When {
                 post("/api/widgets")
@@ -76,7 +70,7 @@ class WidgetControllerTest : BaseAuthenticatedTest() {
         createWidget("Widget 2", TestJwtGenerator.TEST_USER_ID_2)
 
         // List widgets for our test user
-        givenAuth()
+        givenAuth(TestJwtGenerator.TEST_USER_ID)
             .When {
                 get("/api/widgets")
             }

@@ -2,18 +2,13 @@ quarkus:
   application:
     name: quarkus-api
   
-  # HTTP Configuration
-  http:
-    port: 8080
-    cors:
-      ~: true
-      origins: ${CORS_ORIGINS:*}
-      methods: GET,POST,PUT,DELETE,OPTIONS
-      headers: Authorization,Content-Type
-      exposed-headers: Content-Disposition
-      access-control-max-age: 24H
-      access-control-allow-credentials: true
-  
+  # Flyway Configuration for production and testing (@TODO move to flyway container)
+  flyway:
+    migrate-at-start: true
+    locations: db/migration
+    schemas: public, auth
+    default-schema: public
+
   # Hibernate Configuration
   hibernate-orm:
     database:
@@ -31,14 +26,30 @@ quarkus:
       "org.hibernate.type.descriptor.sql":
         level: DEBUG
         min-level: TRACE
+      "org.incept5.api":
+        level: DEBUG
   
   # OpenAPI Configuration
   swagger-ui:
     always-include: true
     path: /swagger-ui
 
+  # Database configuration - uses devservices in test, real DB in prod
+  datasource:
+    db-kind: postgresql
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:postgres}
+    jdbc:
+      url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/postgres}
+    devservices:
+      enabled: false
+      port: 5432
+      db-name: postgres
+      username: postgres
+      password: postgres
+
 supabase:
   jwt:
-    issuer: ${SUPABASE_JWT_ISSUER:https://your-project.supabase.co/auth/v1}
+    issuer: ${SUPABASE_JWT_ISSUER:http://auth:9999}
     secret: ${SUPABASE_JWT_SECRET:your-jwt-secret}
     realm: Incept5 API

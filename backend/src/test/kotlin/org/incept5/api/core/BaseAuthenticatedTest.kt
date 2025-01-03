@@ -27,6 +27,7 @@ abstract class BaseAuthenticatedTest {
     }
 
     protected fun givenAuth(userId: UUID = TestJwtGenerator.TEST_USER_ID): RequestSpecification {
+        ensureUser(userId)
         return RestAssured.given()
             .contentType(ContentType.JSON)
             .header("Authorization", "Bearer ${jwtGenerator.generateToken(userId)}")
@@ -37,7 +38,7 @@ abstract class BaseAuthenticatedTest {
             .contentType(ContentType.JSON)
     }
 
-    @Transactional
+    @Transactional(Transactional.TxType.REQUIRES_NEW)
     protected fun ensureUser(userId: UUID, email: String = "${userId}@example.com") {
         em.createNativeQuery("""
             INSERT INTO auth.users (id, email, encrypted_password, email_confirmed_at)
@@ -49,7 +50,6 @@ abstract class BaseAuthenticatedTest {
         .executeUpdate()
     }
 
-    @Transactional
     protected fun ensureTestUsers() {
         ensureUser(TestJwtGenerator.TEST_USER_ID, "test1@example.com")
         ensureUser(TestJwtGenerator.TEST_USER_ID_2, "test2@example.com")

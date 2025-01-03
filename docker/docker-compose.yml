@@ -7,6 +7,25 @@
 name: supabase
 
 services:
+  api:
+    container_name: quarkus-api
+    build:
+      context: ../backend
+      dockerfile: src/main/docker/Dockerfile.jvm
+    ports:
+      - "8080:8080"
+    environment:
+      POSTGRES_USER: postgres
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_URL: jdbc:postgresql://db:${POSTGRES_PORT}/${POSTGRES_DB}
+      SUPABASE_JWT_ISSUER: http://auth:9999
+      SUPABASE_JWT_SECRET: ${JWT_SECRET}
+    depends_on:
+      db:
+        condition: service_healthy
+      auth:
+        condition: service_healthy
+
   studio:
     container_name: supabase-studio
     image: supabase/studio:20241202-71e5240

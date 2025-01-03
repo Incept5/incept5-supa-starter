@@ -4,13 +4,6 @@ quarkus:
   http:
     test-port: 0
   
-  # Flyway Configuration for tests
-  flyway:
-    migrate-at-start: true
-    locations: db/migration
-    schemas: public, auth
-    default-schema: public
-  
   # Datasource configuration
   datasource:
     devservices:
