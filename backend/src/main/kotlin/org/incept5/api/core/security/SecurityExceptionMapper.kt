@@ -16,12 +16,14 @@ class SecurityExceptionMapper : ExceptionMapper<SecurityException> {
     private val logger = LoggerFactory.getLogger(javaClass)
 
     override fun toResponse(exception: SecurityException): Response {
-        logger.error("Security exception occurred", exception)
+        logger.error("Security exception occurred: ${exception.javaClass.simpleName} - ${exception.message}", exception)
         
         val status = when (exception) {
             is UnauthorizedException -> Response.Status.UNAUTHORIZED
             else -> Response.Status.FORBIDDEN
         }
+        
+        logger.debug("Responding with status: ${status.statusCode} (${status.reasonPhrase})")
 
         val error = mapOf(
             "error" to status.reasonPhrase,

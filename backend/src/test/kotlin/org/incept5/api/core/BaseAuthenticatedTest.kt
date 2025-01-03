@@ -1,6 +1,8 @@
 package org.incept5.api.core
 
 import io.restassured.RestAssured
+import io.restassured.filter.log.RequestLoggingFilter
+import io.restassured.filter.log.ResponseLoggingFilter
 import io.restassured.http.ContentType
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
@@ -20,7 +22,8 @@ abstract class BaseAuthenticatedTest {
 
     @BeforeEach
     fun setup() {
-        RestAssured.enableLoggingOfRequestAndResponseIfValidationFails()
+        // debug logging for restassured
+        RestAssured.filters(RequestLoggingFilter(), ResponseLoggingFilter())
     }
 
     protected fun givenAuth(userId: UUID = TestJwtGenerator.TEST_USER_ID): RequestSpecification {
