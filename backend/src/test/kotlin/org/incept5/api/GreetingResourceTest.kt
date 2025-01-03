@@ -3,11 +3,10 @@ package org.incept5.api
 import io.quarkus.test.junit.QuarkusTest
 import io.restassured.RestAssured.given
 import org.hamcrest.CoreMatchers.`is`
-import org.incept5.api.test.BaseTest
 import org.junit.jupiter.api.Test
 
 @QuarkusTest
-class GreetingResourceTest : BaseTest() {
+class GreetingResourceTest {
 
     @Test
     fun testHelloEndpoint() {

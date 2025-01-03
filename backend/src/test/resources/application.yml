@@ -5,23 +5,22 @@ quarkus:
   # Flyway Configuration for tests
   flyway:
     migrate-at-start: true
-    clean-at-start: false  # Don't clean the database on each test
-    baseline-on-migrate: true
-    baseline-version: 0
-    connect-retries: 10
-    sql-migration-prefix: V
-    repeatable-sql-migration-prefix: R
-    sql-migration-separator: __
-    sql-migration-suffixes: .sql
+    clean-at-start: true
+    locations: db/migration
+    schemas: auth, public
   
   # Hibernate Configuration for tests
   hibernate-orm:
     database:
-      generation: none
-    sql-load-script: no-file
+      generation: validate
   
-  # Datasource configuration will be provided dynamically by TestContainers
+  # Datasource configuration
   datasource:
+    devservices:
+      enabled: true
+      show-logs: true
+      shutdown-strategy: stop
     db-kind: postgresql
     jdbc:
-      max-size: 16 
+      max-size: 16
+

@@ -16,15 +16,6 @@ quarkus:
       exposed-headers: Content-Disposition
       access-control-max-age: 24H
   
-  # Database Configuration
-  datasource:
-    db-kind: postgresql
-    username: postgres
-    password: postgres
-    jdbc:
-      url: jdbc:postgresql://localhost:5432/postgres
-      max-size: 16
-  
   # Hibernate Configuration
   hibernate-orm:
     database:

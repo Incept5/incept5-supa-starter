@@ -12,7 +12,6 @@ repositories {
 val quarkusPlatformGroupId: String by project
 val quarkusPlatformArtifactId: String by project
 val quarkusPlatformVersion: String by project
-val testcontainersVersion = "1.19.4"
 
 dependencies {
     implementation(enforcedPlatform("${quarkusPlatformGroupId}:${quarkusPlatformArtifactId}:${quarkusPlatformVersion}"))
@@ -27,12 +26,13 @@ dependencies {
     implementation("io.quarkus:quarkus-hibernate-orm")
     implementation("io.quarkus:quarkus-smallrye-openapi")
     implementation("io.quarkus:quarkus-flyway")
+    implementation("com.github.f4b6a3:ulid-creator:5.2.2")
+    implementation("io.quarkus:quarkus-jdbc-postgresql")
     
     testImplementation("io.quarkus:quarkus-junit5")
     testImplementation("io.rest-assured:rest-assured")
-    testImplementation("org.testcontainers:testcontainers:${testcontainersVersion}")
-    testImplementation("org.testcontainers:postgresql:${testcontainersVersion}")
-    testImplementation("org.testcontainers:junit-jupiter:${testcontainersVersion}")
+    testImplementation("io.rest-assured:kotlin-extensions")
+    testImplementation("io.quarkus:quarkus-devservices-postgresql")
 }
 
 group = "org.incept5"
