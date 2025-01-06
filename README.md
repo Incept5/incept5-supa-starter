@@ -25,20 +25,6 @@ The project includes three main scripts in the root directory:
 - `up.sh` - Starts the environment with persistent database storage. Data is stored on the host machine under `docker/volumes/db` and persists between container restarts/removals.
 - `build.sh` - Builds the project (details to be added).
 
-## Getting Started
-
-1. Start the Supabase services:
-   ```bash
-   cd docker
-   docker-compose up -d
-   ```
-
-2. Run the backend API:
-   ```bash
-   cd backend
-   ./gradlew quarkusDev
-   ```
-
 ## Services
 
 - **PostgreSQL**: Running on port 5432
@@ -57,7 +43,7 @@ The backend is a Quarkus application written in Kotlin using Gradle with the Kot
 - PostgreSQL JDBC driver
 - YAML configuration support
 
-To start the backend in development mode:
+To start the backend in development mode (first stop the quarkus-api container to prevent port conflicts and then run this script):
 ```bash
 cd backend
 ./gradlew quarkusDev
