@@ -1,4 +1,4 @@
-package org.incept5.api.modules.widget.controller
+package org.incept5.api.modules.widget
 
 import io.quarkus.test.junit.QuarkusTest
 import io.restassured.module.kotlin.extensions.Extract
@@ -12,13 +12,22 @@ import org.incept5.api.core.BaseAuthenticatedTest
 import org.incept5.api.core.security.TestJwtGenerator
 import org.incept5.api.modules.widget.domain.WidgetCategory
 import org.incept5.api.modules.widget.dto.CreateWidgetRequest
-import org.junit.jupiter.api.BeforeEach
-import org.junit.jupiter.api.TestInstance
 import org.junit.jupiter.api.Test
 import java.util.UUID
 
+/**
+ * Integration test for the Widget module demonstrating end-to-end testing without mocks.
+ * 
+ * This test class serves as an example of how to properly write integration tests in the project:
+ * - Uses real database interactions instead of mocks
+ * - Tests complete request/response cycles
+ * - Demonstrates proper authentication setup
+ * - Shows validation testing
+ * - Includes proper test data setup and cleanup
+ * - Tests both success and error scenarios
+ */
 @QuarkusTest
-class WidgetControllerTest : BaseAuthenticatedTest() {
+class WidgetIntegrationTest : BaseAuthenticatedTest() {
 
     @Test
     fun `should create widget when authenticated`() {

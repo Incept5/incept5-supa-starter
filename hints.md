@@ -104,6 +104,13 @@ api/modules/{module-name}/
 - Extend `BaseAuthenticatedTest` for tests requiring authentication
 - Use `ensureTestUsers()` or `ensureUser()` for test user setup
 
+For a comprehensive example of integration testing, see `backend/src/test/kotlin/org/incept5/api/modules/widget/WidgetIntegrationTest.kt`. This test demonstrates:
+- End-to-end testing without mocks
+- Authentication handling
+- Validation testing
+- Test data setup
+- Testing both success and error scenarios
+
 ## Code Style
 
 - Follow Kotlin coding conventions
