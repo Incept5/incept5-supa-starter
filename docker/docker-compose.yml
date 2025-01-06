@@ -17,12 +17,9 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_URL: jdbc:postgresql://host.docker.internal:5432/postgres
+      POSTGRES_URL: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
       SUPABASE_JWT_ISSUER: http://auth:9999
       SUPABASE_JWT_SECRET: ${JWT_SECRET}
-      QUARKUS_LOG_CATEGORY__ORG_INCEPT5_API__LEVEL: INFO
-      QUARKUS_LOG_CATEGORY__ORG_HIBERNATE_SQL__LEVEL: DEBUG
-      QUARKUS_LOG_CATEGORY__ORG_HIBERNATE_TYPE_DESCRIPTOR_SQL__LEVEL: TRACE
     volumes:
       - ./volumes/quarkus/application.yml:/deployments/config/application.yml:ro
     depends_on:

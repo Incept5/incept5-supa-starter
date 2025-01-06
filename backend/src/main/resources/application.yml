@@ -23,14 +23,19 @@ quarkus:
     always-include: true
     path: /swagger-ui
 
-  # Dummy Database configuration to make the build pass (We use devservices in test, real DB in prod configured at docker/volumes/quarkus/application.yml)
+  # Database configuration for Docker environment so that you can use "gradle quarkusDev" to run the app and connect to the dockerized database
   datasource:
     db-kind: postgresql
+    username: ${POSTGRES_USER:postgres}
+    password: ${POSTGRES_PASSWORD:your-super-secret-and-long-postgres-password}
     jdbc:
-      url: jdbc:postgresql://localhost:5432/postgres
-    username: changeme
-    password: changeme
+      url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/postgres}
+      max-size: 16
     devservices:
       enabled: false
 
-
+supabase:
+  jwt:
+    issuer: ${SUPABASE_JWT_ISSUER:http://auth:9999}
+    secret: ${SUPABASE_JWT_SECRET:your-super-secret-jwt-token-with-at-least-32-characters-long}
+    realm: Incept5 API

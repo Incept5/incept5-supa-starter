@@ -17,6 +17,14 @@ A fullstack project template using Supabase for authentication, Quarkus for the 
 - Kotlin
 - Gradle
 
+## Root Scripts
+
+The project includes three main scripts in the root directory:
+
+- `devUp.sh` - Starts the development environment with a container-based database. Data is stored within the container and will be lost when the container is removed.
+- `up.sh` - Starts the environment with persistent database storage. Data is stored on the host machine under `docker/volumes/db` and persists between container restarts/removals.
+- `build.sh` - Builds the project (details to be added).
+
 ## Getting Started
 
 1. Start the Supabase services:
