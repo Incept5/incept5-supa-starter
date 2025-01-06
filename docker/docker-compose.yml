@@ -20,6 +20,9 @@ services:
       POSTGRES_URL: jdbc:postgresql://db:${POSTGRES_PORT}/${POSTGRES_DB}
       SUPABASE_JWT_ISSUER: http://auth:9999
       SUPABASE_JWT_SECRET: ${JWT_SECRET}
+      QUARKUS_LOG_CATEGORY__ORG_INCEPT5_API__LEVEL: INFO
+      QUARKUS_LOG_CATEGORY__ORG_HIBERNATE_SQL__LEVEL: DEBUG
+      QUARKUS_LOG_CATEGORY__ORG_HIBERNATE_TYPE_DESCRIPTOR_SQL__LEVEL: TRACE
     depends_on:
       db:
         condition: service_healthy
@@ -371,13 +374,13 @@ services:
   #     LOGFLARE_SUPABASE_MODE: true
   #     LOGFLARE_MIN_CLUSTER_SIZE: 1
 
-  #     # Comment variables to use Big Query backend for analytics
-  #     POSTGRES_BACKEND_URL: postgresql://supabase_admin:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/_supabase
-  #     POSTGRES_BACKEND_SCHEMA: _analytics
-  #     LOGFLARE_FEATURE_FLAG_OVERRIDE: multibackend=true
-  #     # Uncomment to use Big Query backend for analytics
-  #     # GOOGLE_PROJECT_ID: ${GOOGLE_PROJECT_ID}
-  #     # GOOGLE_PROJECT_NUMBER: ${GOOGLE_PROJECT_NUMBER}
+      # Comment variables to use Big Query backend for analytics
+      # POSTGRES_BACKEND_URL: postgresql://supabase_admin:${POSTGRES_PASSWORD}@${POSTGRES_HOST}:${POSTGRES_PORT}/_supabase
+      # POSTGRES_BACKEND_SCHEMA: _analytics
+      # LOGFLARE_FEATURE_FLAG_OVERRIDE: multibackend=true
+      # Uncomment to use Big Query backend for analytics
+      # GOOGLE_PROJECT_ID: ${GOOGLE_PROJECT_ID}
+      # GOOGLE_PROJECT_NUMBER: ${GOOGLE_PROJECT_NUMBER}
   #   ports:
   #     - 4000:4000
 

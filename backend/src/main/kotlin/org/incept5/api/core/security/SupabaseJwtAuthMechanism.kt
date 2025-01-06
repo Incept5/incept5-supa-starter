@@ -9,11 +9,14 @@ import io.quarkus.vertx.http.runtime.security.HttpAuthenticationMechanism
 import io.smallrye.mutiny.Uni
 import io.vertx.core.json.Json
 import io.vertx.ext.web.RoutingContext
+import jakarta.annotation.Priority
 import jakarta.enterprise.context.ApplicationScoped
+import jakarta.ws.rs.Priorities
 import jakarta.ws.rs.core.MediaType
 import org.slf4j.LoggerFactory
 import java.util.*
 
+@Priority(Priorities.AUTHENTICATION)
 @ApplicationScoped
 class SupabaseJwtAuthMechanism(
     private val jwtValidator: SupabaseJwtValidator,
