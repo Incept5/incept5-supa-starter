@@ -7,8 +7,10 @@ import io.quarkus.security.runtime.QuarkusSecurityIdentity
 import io.quarkus.vertx.http.runtime.security.ChallengeData
 import io.quarkus.vertx.http.runtime.security.HttpAuthenticationMechanism
 import io.smallrye.mutiny.Uni
+import io.vertx.core.json.Json
 import io.vertx.ext.web.RoutingContext
 import jakarta.enterprise.context.ApplicationScoped
+import jakarta.ws.rs.core.MediaType
 import org.slf4j.LoggerFactory
 import java.util.*
 
@@ -52,6 +54,20 @@ class SupabaseJwtAuthMechanism(
 
     override fun getChallenge(context: RoutingContext): Uni<ChallengeData> {
         logger.debug("Generating authentication challenge for request: ${context.request().uri()}")
+        
+        val errorResponse = mapOf(
+            "error" to "Unauthorized",
+            "message" to "Authentication is required to access this resource",
+            "status" to 401
+        )
+        
+        // Set the response body and content type
+        context.response()
+            .putHeader("Content-Type", MediaType.APPLICATION_JSON)
+            .setStatusCode(401)
+            .end(Json.encode(errorResponse))
+        
+        // Return the WWW-Authenticate challenge header
         return Uni.createFrom().item(
             ChallengeData(
                 401,

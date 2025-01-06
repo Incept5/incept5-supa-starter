@@ -4,6 +4,7 @@ import io.restassured.RestAssured
 import io.restassured.filter.log.RequestLoggingFilter
 import io.restassured.filter.log.ResponseLoggingFilter
 import io.restassured.http.ContentType
+import io.restassured.parsing.Parser
 import io.restassured.specification.RequestSpecification
 import jakarta.inject.Inject
 import jakarta.persistence.EntityManager
@@ -24,6 +25,8 @@ abstract class BaseAuthenticatedTest {
     fun setup() {
         // debug logging for restassured
         RestAssured.filters(RequestLoggingFilter(), ResponseLoggingFilter())
+        // Set default parser to JSON for all responses
+        RestAssured.defaultParser = Parser.JSON
     }
 
     protected fun givenAuth(userId: UUID = TestJwtGenerator.TEST_USER_ID): RequestSpecification {

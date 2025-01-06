@@ -2,9 +2,9 @@
 
 set -e  # Exit on any error
 
-echo "Building backend..."
-if ! (cd backend && ./gradlew clean build); then
-    echo "Backend build failed!"
+# Run the build script
+if ! ./build.sh; then
+    echo "Build failed, not starting containers"
     exit 1
 fi
 
