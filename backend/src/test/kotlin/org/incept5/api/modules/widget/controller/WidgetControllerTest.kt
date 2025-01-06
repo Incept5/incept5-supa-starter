@@ -62,6 +62,30 @@ class WidgetControllerTest : BaseAuthenticatedTest() {
     }
 
     @Test
+    fun `should return 400 with validation errors for invalid widget request`() {
+        val request = CreateWidgetRequest(
+            description = "", // Invalid: blank description
+            category = WidgetCategory.BASIC,
+            level = 0 // Invalid: below minimum level
+        )
+
+        givenAuth(TestJwtGenerator.TEST_USER_ID)
+            .body(request)
+            .When {
+                post("/api/widgets")
+            }
+            .Then {
+                statusCode(Response.Status.BAD_REQUEST.statusCode)
+                body("error", equalTo("Validation Error"))
+                body("status", equalTo(400))
+                body("violations.size()", equalTo(3))
+                body("violations.find { it.field == 'createWidget.request.description' && it.message == 'Description must be between 3 and 1000 characters' }", notNullValue())
+                body("violations.find { it.field == 'createWidget.request.description' && it.message == 'Description is required' }", notNullValue())
+                body("violations.find { it.field == 'createWidget.request.level' && it.message == 'Level must be at least 1' }", notNullValue())
+            }
+    }
+
+    @Test
     fun `should list only authenticated user widgets`() {
         // Create a widget for our test user
         val widget1Id = createWidget("Widget 1")

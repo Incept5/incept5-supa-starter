@@ -31,7 +31,7 @@ class ValidationExceptionMapper : ExceptionMapper<ConstraintViolationException> 
     private val logger = LoggerFactory.getLogger(javaClass)
 
     override fun toResponse(exception: ConstraintViolationException): Response {
-        logger.error("Validation error occurred", exception)
+        logger.warn("Validation error occurred: {}", exception.message)
 
         val errors = exception.constraintViolations.map { violation ->
             mapOf(
