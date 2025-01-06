@@ -225,6 +225,18 @@ services:
           allow:
             - admin
 
+  ## Quarkus API routes
+  - name: quarkus-api
+    _comment: 'Quarkus: /api/* -> http://quarkus:8080/api/*'
+    url: http://quarkus:8080/api/
+    routes:
+      - name: quarkus-api-all
+        strip_path: false
+        paths:
+          - /api/
+    plugins:
+      - name: cors
+
   ## Protected Dashboard - catch all remaining routes
   - name: dashboard
     _comment: 'Studio: /* -> http://studio:3000/*'

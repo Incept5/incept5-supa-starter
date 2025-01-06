@@ -17,39 +17,20 @@ quarkus:
       sql: true
       bind-parameters: true
     physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
-  
-  # Development Configuration
-  log:
-    category:
-      "org.hibernate.SQL":
-        level: DEBUG
-      "org.hibernate.type.descriptor.sql":
-        level: DEBUG
-        min-level: TRACE
-      "org.incept5.api":
-        level: DEBUG
-  
+
   # OpenAPI Configuration
   swagger-ui:
     always-include: true
     path: /swagger-ui
 
-  # Database configuration - uses devservices in test, real DB in prod
+  # Dummy Database configuration to make the build pass (We use devservices in test, real DB in prod configured at docker/volumes/quarkus/application.yml)
   datasource:
     db-kind: postgresql
-    username: ${POSTGRES_USER:postgres}
-    password: ${POSTGRES_PASSWORD:postgres}
     jdbc:
-      url: ${POSTGRES_URL:jdbc:postgresql://localhost:5432/postgres}
+      url: jdbc:postgresql://localhost:5432/postgres
+    username: changeme
+    password: changeme
     devservices:
       enabled: false
-      port: 5432
-      db-name: postgres
-      username: postgres
-      password: postgres
 
-supabase:
-  jwt:
-    issuer: ${SUPABASE_JWT_ISSUER:http://auth:9999}
-    secret: ${SUPABASE_JWT_SECRET:your-jwt-secret}
-    realm: Incept5 API
+

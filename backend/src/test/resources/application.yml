@@ -6,11 +6,29 @@ quarkus:
   
   # Datasource configuration
   datasource:
+    db-kind: postgresql
+    username: postgres
+    password: your-super-secret-and-long-postgres-password
+    jdbc:
+      url: jdbc:postgresql://localhost:5432/postgres
+      max-size: 16
     devservices:
       enabled: true
       port: 5432
-    jdbc:
-      max-size: 16
+      db-name: postgres
+      username: postgres
+      password: your-super-secret-and-long-postgres-password
+
+    # Development Configuration
+  log:
+    category:
+      "org.hibernate.SQL":
+        level: DEBUG
+      "org.hibernate.type.descriptor.sql":
+        level: DEBUG
+        min-level: TRACE
+      "org.incept5.api":
+        level: DEBUG
 
 # Supabase JWT configuration for tests
 supabase:

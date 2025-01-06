@@ -1,0 +1,28 @@
+quarkus:
+
+  # Database configuration for Docker environment
+  datasource:
+    db-kind: postgresql
+    username: postgres
+    password: your-super-secret-and-long-postgres-password
+    jdbc:
+      url: jdbc:postgresql://db:5432/postgres
+      max-size: 16
+    devservices:
+      enabled: false
+
+  # Logging Configuration
+  log:
+    category:
+      "org.hibernate.SQL":
+        level: DEBUG
+      "org.hibernate.type.descriptor.sql":
+        level: TRACE
+      "org.incept5.api":
+        level: DEBUG
+
+supabase:
+  jwt:
+    issuer: http://auth:9999
+    secret: your-super-secret-jwt-token-with-at-least-32-characters-long
+    realm: Incept5 API

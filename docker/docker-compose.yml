@@ -17,12 +17,14 @@ services:
     environment:
       POSTGRES_USER: postgres
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
-      POSTGRES_URL: jdbc:postgresql://db:${POSTGRES_PORT}/${POSTGRES_DB}
+      POSTGRES_URL: jdbc:postgresql://host.docker.internal:5432/postgres
       SUPABASE_JWT_ISSUER: http://auth:9999
       SUPABASE_JWT_SECRET: ${JWT_SECRET}
       QUARKUS_LOG_CATEGORY__ORG_INCEPT5_API__LEVEL: INFO
       QUARKUS_LOG_CATEGORY__ORG_HIBERNATE_SQL__LEVEL: DEBUG
       QUARKUS_LOG_CATEGORY__ORG_HIBERNATE_TYPE_DESCRIPTOR_SQL__LEVEL: TRACE
+    volumes:
+      - ./volumes/quarkus/application.yml:/deployments/config/application.yml:ro
     depends_on:
       db:
         condition: service_healthy
@@ -403,6 +405,8 @@ services:
       - -c
       - log_min_messages=fatal # prevents Realtime polling queries from appearing in logs
     restart: unless-stopped
+    ports:
+      - 5432:5432
     environment:
       POSTGRES_HOST: /var/run/postgresql
       PGPORT: ${POSTGRES_PORT}
