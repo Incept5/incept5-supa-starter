@@ -1,6 +1,6 @@
 # Incept5 Supabase Starter
 
-A fullstack project template using Supabase for authentication, Quarkus for the backend API, and prepared for a frontend implementation.
+A fullstack project template using Supabase for authentication, Quarkus for the backend API, and React for the frontend.
 
 ## Project Structure
 
@@ -8,7 +8,11 @@ A fullstack project template using Supabase for authentication, Quarkus for the 
   - `/docker/kong` - Kong API Gateway configuration
 - `/backend` - Quarkus API (Kotlin + Gradle)
   - `/backend/src/main/resources/db/migration` - Flyway database migrations
-- `/frontend` - Frontend application (TODO)
+- `/frontend` - React frontend application
+  - Built with Vite, React, TypeScript, and Tailwind CSS
+  - Uses shadcn/ui components
+  - Includes i18n support
+  - Integrated with Supabase Auth
 
 ## Prerequisites
 
@@ -16,6 +20,8 @@ A fullstack project template using Supabase for authentication, Quarkus for the 
 - Java 17 or later
 - Kotlin
 - Gradle
+- Node.js 18 or later
+- pnpm (preferred over npm)
 
 ## Root Scripts
 
@@ -31,6 +37,7 @@ The project includes three main scripts in the root directory:
 - **Kong API Gateway**: Running on ports 8000 (proxy) and 8443 (proxy - SSL)
 - **Supabase Auth**: Running on port 9999
 - **Quarkus API**: Running on port 8080 (dev mode)
+- **Frontend Dev Server**: Running on port 5173 (dev mode)
 
 ## Development
 
@@ -47,6 +54,23 @@ To start the backend in development mode (first stop the quarkus-api container t
 ```bash
 cd backend
 ./gradlew quarkusDev
+```
+
+### Frontend Development
+
+The frontend is a modern React application built with:
+- Vite for fast development and optimized builds
+- React with TypeScript for type safety
+- Tailwind CSS for styling
+- shadcn/ui for beautiful, accessible components
+- i18n for internationalization
+- Supabase Auth integration
+
+To start the frontend in development mode:
+```bash
+cd frontend
+pnpm install
+pnpm dev
 ```
 
 ### Database Migrations

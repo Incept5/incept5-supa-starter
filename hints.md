@@ -12,6 +12,17 @@ api/modules/{module-name}/
   └── dto/           # Data transfer objects
 ```
 
+### Frontend Module Organization
+```
+frontend/src/
+  ├── components/     # Reusable React components
+  ├── pages/         # Page components and routing
+  ├── lib/           # Utilities and shared code
+  ├── hooks/         # Custom React hooks
+  ├── i18n/          # Internationalization files
+  └── styles/        # Global styles and Tailwind config
+```
+
 ### Service Layer Guidelines
 - Each service class should be focused on a single responsibility
 - Services should be in separate files
@@ -77,6 +88,54 @@ api/modules/{module-name}/
   var id: String = UlidGenerator.generate()
   ```
 
+## Frontend Guidelines
+
+### Component Best Practices
+- Use TypeScript for all components and files
+- Keep components small and focused
+- Use shadcn/ui components for consistent UI
+- Implement proper prop types and interfaces
+- Use React hooks for state management
+- Example:
+  ```typescript
+  interface ButtonProps {
+    label: string;
+    onClick: () => void;
+    variant?: 'primary' | 'secondary';
+  }
+
+  export function Button({ label, onClick, variant = 'primary' }: ButtonProps) {
+    return (
+      <button
+        onClick={onClick}
+        className={cn(
+          'px-4 py-2 rounded',
+          variant === 'primary' ? 'bg-primary text-white' : 'bg-secondary text-black'
+        )}
+      >
+        {label}
+      </button>
+    );
+  }
+  ```
+
+### Styling Guidelines
+- Use Tailwind CSS for styling
+- Follow the project's color scheme and design tokens
+- Use the `cn()` utility for conditional classes
+- Keep styles modular and reusable
+- Use responsive design patterns
+
+### Internationalization
+- Use translation keys for all user-facing text
+- Keep translation files organized by feature
+- Use the `useTranslation` hook consistently
+- Example:
+  ```typescript
+  const { t } = useTranslation();
+  return <h1>{t('page.title')}</h1>;
+  ```
+
 ## Logging Guidelines
 
 ### Logging Levels
@@ -97,6 +156,7 @@ api/modules/{module-name}/
 
 ## Testing Guidelines
 
+### Backend Testing
 - Write integration tests using real dependencies (no mocks)
 - Use `@QuarkusTest` for integration tests
 - Test both success and error scenarios
@@ -111,9 +171,24 @@ For a comprehensive example of integration testing, see `backend/src/test/kotlin
 - Test data setup
 - Testing both success and error scenarios
 
+### Frontend Testing
+- Write unit tests for components using Vitest
+- Use React Testing Library for component testing
+- Test user interactions and state changes
+- Mock API calls and external dependencies
+- Example:
+  ```typescript
+  test('button click triggers action', async () => {
+    const handleClick = vi.fn();
+    render(<Button label="Click me" onClick={handleClick} />);
+    await userEvent.click(screen.getByText('Click me'));
+    expect(handleClick).toHaveBeenCalled();
+  });
+  ```
+
 ## Code Style
 
-- Follow Kotlin coding conventions
+- Follow Kotlin/TypeScript coding conventions
 - Use meaningful variable and function names
 - Keep functions small and focused
 - Document public APIs and complex logic
@@ -129,15 +204,23 @@ For a comprehensive example of integration testing, see `backend/src/test/kotlin
 ## Tools and Commands
 
 - Use `pnpm` instead of `npm` for frontend dependencies
-- Run tests after code changes to backend
+- Run tests after code changes:
   ```bash
-  cd ../backend && ./gradlew clean test | cat
+  # Backend tests
+  cd backend && ./gradlew clean test | cat
+
+  # Frontend tests
+  cd frontend && pnpm test
   ```
 If you see a test failure then look in the index.html that is generated for the cause of the failure:
 backend/build/reports/tests/test/index.html
 
 - Start development environment:
   ```bash
+  # Start backend services
   cd docker && docker-compose up -d
   cd ../backend && ./gradlew quarkusDev
+
+  # Start frontend development server
+  cd ../frontend && pnpm dev
   ``` 
