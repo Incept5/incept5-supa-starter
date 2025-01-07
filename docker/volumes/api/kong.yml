@@ -230,10 +230,10 @@ services:
     _comment: 'Quarkus: /api/* -> http://quarkus-api:8080/api/*'
     url: http://quarkus-api:8080/api
     routes:
-      - name: quarkus-api-all
-        strip_path: true
+      - name: quarkus-api-route
         paths:
           - /api/
+        strip_path: true
     plugins:
       - name: cors
 

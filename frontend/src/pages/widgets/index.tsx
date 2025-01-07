@@ -29,6 +29,7 @@ import * as z from 'zod'
 import { Widget, WidgetCategory, WidgetFilters } from '../../types/widget'
 import { widgetService } from '../../lib/api/widgetService'
 import { useToast } from '../../components/ui/use-toast'
+import { useDebounce } from '../../hooks/useDebounce'
 
 const createWidgetSchema = z.object({
   description: z.string().min(3).max(1000),
@@ -40,13 +41,17 @@ type CreateWidgetForm = z.infer<typeof createWidgetSchema>
 
 export default function WidgetsPage() {
   const [widgets, setWidgets] = useState<Widget[]>([])
-  const [filters, setFilters] = useState<WidgetFilters>({
-    page: 0,
-    size: 10,
-  })
   const [totalPages, setTotalPages] = useState(0)
   const [isCreateDialogOpen, setIsCreateDialogOpen] = useState(false)
   const { toast } = useToast()
+  
+  const [searchTerm, setSearchTerm] = useState('')
+  const debouncedSearch = useDebounce(searchTerm)
+  
+  const filtersRef = React.useRef<WidgetFilters>({
+    page: 0,
+    size: 10,
+  })
 
   const form = useForm<CreateWidgetForm>({
     resolver: zodResolver(createWidgetSchema),
@@ -59,7 +64,7 @@ export default function WidgetsPage() {
 
   const loadWidgets = useCallback(async () => {
     try {
-      const response = await widgetService.list(filters)
+      const response = await widgetService.list(filtersRef.current)
       setWidgets(response.content)
       setTotalPages(response.totalPages)
     } catch (error) {
@@ -69,9 +74,31 @@ export default function WidgetsPage() {
         variant: 'destructive',
       })
     }
-  }, [filters, toast])
+  }, [toast])
 
   useEffect(() => {
+    filtersRef.current = {
+      ...filtersRef.current,
+      search: debouncedSearch || undefined,
+      page: 0
+    }
+    loadWidgets()
+  }, [debouncedSearch, loadWidgets])
+
+  const handleCategoryChange = useCallback((value: string) => {
+    filtersRef.current = {
+      ...filtersRef.current,
+      category: value === "ALL" ? undefined : value as WidgetCategory,
+      page: 0,
+    }
+    loadWidgets()
+  }, [loadWidgets])
+
+  const handlePageChange = useCallback((newPage: number) => {
+    filtersRef.current = {
+      ...filtersRef.current,
+      page: newPage,
+    }
     loadWidgets()
   }, [loadWidgets])
 
@@ -181,20 +208,12 @@ export default function WidgetsPage() {
         <Input
           placeholder="Search widgets..."
           className="max-w-sm"
-          value={filters.search || ''}
-          onChange={(e: ChangeEvent<HTMLInputElement>) =>
-            setFilters((prev: WidgetFilters) => ({ ...prev, search: e.target.value, page: 0 }))
-          }
+          value={searchTerm}
+          onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
         />
         <Select
-          value={filters.category || "ALL"}
-          onValueChange={(value: string) =>
-            setFilters((prev: WidgetFilters) => ({
-              ...prev,
-              category: value === "ALL" ? undefined : value as WidgetCategory,
-              page: 0,
-            }))
-          }
+          value={filtersRef.current.category || "ALL"}
+          onValueChange={handleCategoryChange}
         >
           <SelectTrigger className="w-[180px]">
             <SelectValue placeholder="All Categories" />
@@ -227,19 +246,15 @@ export default function WidgetsPage() {
       <div className="mt-6 flex justify-center gap-2">
         <Button
           variant="outline"
-          onClick={() =>
-            setFilters((prev: WidgetFilters) => ({ ...prev, page: prev.page! - 1 }))
-          }
-          disabled={filters.page === 0}
+          onClick={() => handlePageChange(filtersRef.current.page! - 1)}
+          disabled={filtersRef.current.page === 0}
         >
           Previous
         </Button>
         <Button
           variant="outline"
-          onClick={() =>
-            setFilters((prev: WidgetFilters) => ({ ...prev, page: prev.page! + 1 }))
-          }
-          disabled={filters.page === totalPages - 1}
+          onClick={() => handlePageChange(filtersRef.current.page! + 1)}
+          disabled={filtersRef.current.page === totalPages - 1}
         >
           Next
         </Button>
