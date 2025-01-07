@@ -5,6 +5,7 @@ import { getDefaultLayout } from './components/layout'
 import HomePage from './pages/home'
 import { LoginPage } from './pages/auth/login'
 import { SignupPage } from './pages/auth/signup'
+import WidgetsPage from './pages/widgets'
 
 export const routerObjects: RouteObject[] = [
   {
@@ -18,6 +19,10 @@ export const routerObjects: RouteObject[] = [
   {
     path: '/signup',
     Component: SignupPage,
+  },
+  {
+    path: '/widgets',
+    Component: WidgetsPage,
   },
 ]
 

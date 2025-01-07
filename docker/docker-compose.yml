@@ -7,7 +7,8 @@
 name: supabase
 
 services:
-  api:
+
+  quarkus-api:
     container_name: quarkus-api
     build:
       context: ../backend
@@ -19,7 +20,7 @@ services:
       POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
       POSTGRES_URL: jdbc:postgresql://${POSTGRES_HOST}:${POSTGRES_PORT}/${POSTGRES_DB}
       SUPABASE_JWT_ISSUER: http://auth:9999
-      SUPABASE_JWT_SECRET: ${JWT_SECRET}
+      SUPABASE_JWT_SECRET: ${JWT_SECRET_BASE64}
     volumes:
       - ./volumes/quarkus/application.yml:/deployments/config/application.yml:ro
     depends_on:

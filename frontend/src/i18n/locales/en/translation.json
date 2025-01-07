@@ -6,5 +6,7 @@
   "i18nsupport": "i18n support out of the box",
   "i18nsupport-desc": "Ship your product with different languages natively",
   "hero-title": "Welcome to Incept5",
-  "get-started": "Get Started"
+  "get-started": "Get Started",
+  "home": "Home",
+  "widgets": "Widgets"
 }

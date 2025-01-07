@@ -11,13 +11,9 @@ quarkus:
     devservices:
       enabled: false
 
-  # Logging Configuration
+  # Updated Logging Configuration
   log:
     category:
-      "org.hibernate.SQL":
-        level: INFO
-      "org.hibernate.type.descriptor.sql":
-        level: INFO
       "org.incept5.api":
         level: DEBUG
 

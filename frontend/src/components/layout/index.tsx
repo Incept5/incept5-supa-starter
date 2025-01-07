@@ -5,9 +5,11 @@ export const getNoneLayout = (page: React.ReactElement) => page
 
 export const getDefaultLayout = (page: React.ReactElement) => {
   return (
-    <div className="h-min-screen">
+    <div className="min-h-screen">
       <Header />
-      {page}
+      <div className="pt-[72px]">
+        {page}
+      </div>
     </div>
   )
 }

@@ -11,8 +11,12 @@ import java.util.Base64
 class SupabaseJwtValidator(private val config: SupabaseJwtConfig) {
 
     private val logger = LoggerFactory.getLogger(javaClass)
+
     private val algorithm: Algorithm by lazy {
-        Algorithm.HMAC256(Base64.getDecoder().decode(config.secret()))
+        Algorithm.HMAC256(
+            // supabase.jwt.secret is expected to already be Base64 URL–encoded
+            Base64.getDecoder().decode(config.secret().trim())
+        )
     }
 
     fun validateToken(token: String): DecodedJWT {
@@ -20,17 +24,18 @@ class SupabaseJwtValidator(private val config: SupabaseJwtConfig) {
         logger.debug("Using issuer: ${config.issuer()}")
         
         return JWT.require(algorithm)
-            .withIssuer(config.issuer())
             .build()
             .verify(token)
             .also { jwt ->
-                logger.debug("""
+                logger.debug(
+                    """
                     JWT token validated successfully:
                     - Subject: ${jwt.subject}
                     - Issuer: ${jwt.issuer}
                     - Issued At: ${jwt.issuedAt}
                     - Expires At: ${jwt.expiresAt}
-                """.trimIndent())
+                    """.trimIndent()
+                )
             }
     }
-} 
+}

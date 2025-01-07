@@ -19,14 +19,15 @@ quarkus:
       username: postgres
       password: your-super-secret-and-long-postgres-password
 
+    # Hibernate Configuration
+  hibernate-orm:
+    log:
+      sql: true
+      bind-parameters: true
+
     # Development Configuration
   log:
     category:
-      "org.hibernate.SQL":
-        level: DEBUG
-      "org.hibernate.type.descriptor.sql":
-        level: DEBUG
-        min-level: TRACE
       "org.incept5.api":
         level: DEBUG
 

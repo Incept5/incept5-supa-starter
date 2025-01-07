@@ -227,11 +227,11 @@ services:
 
   ## Quarkus API routes
   - name: quarkus-api
-    _comment: 'Quarkus: /api/* -> http://quarkus:8080/api/*'
-    url: http://quarkus:8080/api/
+    _comment: 'Quarkus: /api/* -> http://quarkus-api:8080/api/*'
+    url: http://quarkus-api:8080/api
     routes:
       - name: quarkus-api-all
-        strip_path: false
+        strip_path: true
         paths:
           - /api/
     plugins:
