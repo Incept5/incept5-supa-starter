@@ -16,6 +16,8 @@ api/modules/{module-name}/
   └── dto/           # Data transfer objects
 ```
 
+See the widget module for an example of how to implement the API.
+
 ## API-First Development
 
 ### Core Principles
@@ -216,6 +218,9 @@ For a comprehensive example of integration testing, see `backend/src/test/kotlin
 - Validation testing
 - Test data setup
 - Testing both success and error scenarios
+
+If you have run the backend tests and see a failure then look in the index.html that is generated for the cause of the failure:
+`backend/build/reports/tests/test/index.html`
 
 ## Backend Code Style and Patterns
 - Follow Kotlin coding conventions
