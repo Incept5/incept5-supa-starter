@@ -29,11 +29,16 @@ abstract class BaseAuthenticatedTest {
         RestAssured.defaultParser = Parser.JSON
     }
 
-    protected fun givenAuth(userId: UUID = TestJwtGenerator.TEST_USER_ID): RequestSpecification {
-        return RestAssured.given()
+    /**
+     * Creates a unique test user ID for isolation between tests.
+     * This ensures each test runs with its own user context, preventing data interference.
+     */
+    protected fun createTestUser(): UUID = UUID.randomUUID()
+
+    protected fun givenAuth(userId: UUID): RequestSpecification =
+        RestAssured.given()
             .contentType(ContentType.JSON)
             .header("Authorization", "Bearer ${jwtGenerator.generateToken(userId)}")
-    }
 
     protected fun given(): RequestSpecification {
         return RestAssured.given()

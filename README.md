@@ -41,6 +41,38 @@ The project includes three main scripts in the root directory:
 
 ## Development
 
+There are two main ways to run the development stack:
+
+### Option 1: Full Container Stack
+
+This option runs everything in containers, including the Quarkus API:
+
+```bash
+# Start the full stack with all services in containers
+./devUp.sh
+
+# To run in detached mode (background)
+./devUp.sh -d
+```
+
+### Option 2: Local Quarkus Development
+
+This option runs Quarkus locally in dev mode for hot reloading, while other services run in containers:
+
+```bash
+# First, start the stack without Quarkus
+./devUp.sh --no-quarkus
+
+# Then in a separate terminal, start Quarkus in dev mode
+cd backend
+./gradlew quarkusDev
+```
+
+The second option is recommended during active backend development as it provides:
+- Hot reloading of code changes
+- Live debugging capabilities
+- Dev UI access (http://localhost:8080/q/dev)
+
 ### Backend Development
 
 The backend is a Quarkus application written in Kotlin using Gradle with the Kotlin DSL. It includes:

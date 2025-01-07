@@ -22,29 +22,29 @@ class WidgetService(private val widgetRepository: WidgetRepository) {
     private val logger = LoggerFactory.getLogger(javaClass)
     private val allowedSortFields = setOf("createdAt", "updatedAt", "description", "category", "level")
 
-    private fun parseUserId(userId: String): UUID = try {
-        UUID.fromString(userId)
-    } catch (e: IllegalArgumentException) {
-        logger.error("Invalid UUID format for userId: {}", userId)
-        throw InvalidRequestException("Invalid user ID format")
+    private fun parseUserId(userId: String): UUID {
+        return try {
+            UUID.fromString(userId)
+        } catch (e: IllegalArgumentException) {
+            throw InvalidRequestException("Invalid user ID format")
+        }
     }
 
     private fun validateSortField(field: String): String {
-        return if (allowedSortFields.contains(field)) {
-            field
-        } else {
-            logger.warn("Invalid sort field requested: {}, defaulting to createdAt", field)
-            "createdAt"
+        if (!allowedSortFields.contains(field)) {
+            throw InvalidRequestException("Invalid sort field: $field. Allowed fields are: ${allowedSortFields.joinToString()}")
         }
+        return field
     }
 
     @Transactional
     fun createWidget(userId: String, request: CreateWidgetRequest): WidgetResponse {
-        logger.info("Creating widget for user: userId={}, category={}", userId, request.category)
+        logger.info("Creating widget: userId={}", userId)
         logger.debug("Widget creation details: {}", request)
 
+        val userUUID = parseUserId(userId)
         val widget = Widget(
-            userId = parseUserId(userId),
+            userId = userUUID,
             description = request.description,
             category = request.category,
             level = request.level
@@ -129,10 +129,11 @@ class WidgetService(private val widgetRepository: WidgetRepository) {
     fun deleteWidget(userId: String, widgetId: String) {
         logger.info("Deleting widget: userId={}, widgetId={}", userId, widgetId)
         
-        val widget = widgetRepository.findByIdAndUserId(widgetId, parseUserId(userId))
+        val userUUID = parseUserId(userId)
+        val widget = widgetRepository.findByIdAndUserId(widgetId, userUUID)
             ?: throw ResourceNotFoundException("Widget not found")
-
+        
         widgetRepository.delete(widget)
-        logger.info("Widget deleted successfully: id={}", widgetId)
+        logger.info("Widget deleted successfully: id={}", widget.id)
     }
 } 

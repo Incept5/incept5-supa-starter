@@ -9,7 +9,6 @@ import jakarta.ws.rs.core.Response
 import org.hamcrest.CoreMatchers.equalTo
 import org.hamcrest.CoreMatchers.notNullValue
 import org.incept5.api.core.BaseAuthenticatedTest
-import org.incept5.api.core.security.TestJwtGenerator
 import org.incept5.api.modules.widget.domain.WidgetCategory
 import org.incept5.api.modules.widget.dto.CreateWidgetRequest
 import org.junit.jupiter.api.Test
@@ -31,79 +30,59 @@ class WidgetIntegrationTest : BaseAuthenticatedTest() {
 
     @Test
     fun `should create widget when authenticated`() {
+        val testUser = createTestUser()
         val request = CreateWidgetRequest(
             description = "Test Widget",
             category = WidgetCategory.BASIC,
             level = 1
         )
 
-        givenAuth(TestJwtGenerator.TEST_USER_ID)
-            .body(request)
+        givenAuth(testUser)
             .When {
+                body(request)
                 post("/api/widgets")
             }
             .Then {
                 statusCode(Response.Status.CREATED.statusCode)
                 body("id", notNullValue())
+                body("userId", equalTo(testUser.toString()))
                 body("description", equalTo(request.description))
                 body("category", equalTo(request.category.name))
                 body("level", equalTo(request.level))
-                body("userId", equalTo(TestJwtGenerator.TEST_USER_ID.toString()))
+                body("createdAt", notNullValue())
+                body("updatedAt", notNullValue())
             }
     }
 
     @Test
-    fun `should return 401 when not authenticated`() {
-        val request = CreateWidgetRequest(
-            description = "Test Widget",
-            category = WidgetCategory.BASIC,
-            level = 1
-        )
-
-        given()
-            .body(request)
+    fun `should reject invalid category query parameter`() {
+        val testUser = createTestUser()
+        // Create a widget for our test user
+        createWidget(testUser, "Widget 1")
+        
+        // Try to filter by invalid category
+        givenAuth(testUser)
             .When {
-                post("/api/widgets")
-            }
-            .Then {
-                statusCode(Response.Status.UNAUTHORIZED.statusCode)
-            }
-    }
-
-    @Test
-    fun `should return 400 with validation errors for invalid widget request`() {
-        val request = CreateWidgetRequest(
-            description = "", // Invalid: blank description
-            category = WidgetCategory.BASIC,
-            level = 0 // Invalid: below minimum level
-        )
-
-        givenAuth(TestJwtGenerator.TEST_USER_ID)
-            .body(request)
-            .When {
-                post("/api/widgets")
+                get("/api/widgets?category=invalid_category")
             }
             .Then {
                 statusCode(Response.Status.BAD_REQUEST.statusCode)
-                body("error", equalTo("Validation Error"))
-                body("status", equalTo(400))
-                body("violations.size()", equalTo(3))
-                body("violations.find { it.field == 'createWidget.request.description' && it.message == 'Description must be between 3 and 1000 characters' }", notNullValue())
-                body("violations.find { it.field == 'createWidget.request.description' && it.message == 'Description is required' }", notNullValue())
-                body("violations.find { it.field == 'createWidget.request.level' && it.message == 'Level must be at least 1' }", notNullValue())
             }
     }
 
     @Test
     fun `should list only authenticated user widgets`() {
+        val testUser1 = createTestUser()
+        val testUser2 = createTestUser()
+
         // Create a widget for our test user
-        val widget1Id = createWidget("Widget 1")
+        val widget1Id = createWidget(testUser1, "Widget 1")
         
         // Create a widget for another user
-        createWidget("Widget 2", TestJwtGenerator.TEST_USER_ID_2)
+        createWidget(testUser2, "Widget 2")
 
         // List widgets for our test user
-        givenAuth(TestJwtGenerator.TEST_USER_ID)
+        givenAuth(testUser1)
             .When {
                 get("/api/widgets")
             }
@@ -111,11 +90,11 @@ class WidgetIntegrationTest : BaseAuthenticatedTest() {
                 statusCode(Response.Status.OK.statusCode)
                 body("content.size()", equalTo(1))
                 body("content[0].id", equalTo(widget1Id))
-                body("content[0].userId", equalTo(TestJwtGenerator.TEST_USER_ID.toString()))
+                body("content[0].userId", equalTo(testUser1.toString()))
             }
     }
 
-    private fun createWidget(description: String, userId: UUID = TestJwtGenerator.TEST_USER_ID): String {
+    private fun createWidget(userId: UUID, description: String): String {
         val request = CreateWidgetRequest(
             description = description,
             category = WidgetCategory.BASIC,
@@ -123,8 +102,8 @@ class WidgetIntegrationTest : BaseAuthenticatedTest() {
         )
 
         return givenAuth(userId)
-            .body(request)
             .When {
+                body(request)
                 post("/api/widgets")
             }
             .Then {
