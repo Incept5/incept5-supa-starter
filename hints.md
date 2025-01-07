@@ -176,15 +176,6 @@ For a comprehensive example of integration testing, see `backend/src/test/kotlin
 - Use React Testing Library for component testing
 - Test user interactions and state changes
 - Mock API calls and external dependencies
-- Example:
-  ```typescript
-  test('button click triggers action', async () => {
-    const handleClick = vi.fn();
-    render(<Button label="Click me" onClick={handleClick} />);
-    await userEvent.click(screen.getByText('Click me'));
-    expect(handleClick).toHaveBeenCalled();
-  });
-  ```
 
 ## Code Style
 

@@ -147,9 +147,9 @@ export default function WidgetsPage() {
                   name="description"
                   render={({ field }: { field: ControllerRenderProps<CreateWidgetForm, 'description'> }) => (
                     <FormItem>
-                      <FormLabel>Description</FormLabel>
+                      <FormLabel htmlFor="description">Description</FormLabel>
                       <FormControl>
-                        <Input {...field} />
+                        <Input id="description" {...field} />
                       </FormControl>
                       <FormMessage />
                     </FormItem>
@@ -160,18 +160,18 @@ export default function WidgetsPage() {
                   name="category"
                   render={({ field }: { field: ControllerRenderProps<CreateWidgetForm, 'category'> }) => (
                     <FormItem>
-                      <FormLabel>Category</FormLabel>
+                      <FormLabel htmlFor="category">Category</FormLabel>
                       <Select
                         onValueChange={field.onChange}
                         defaultValue={field.value}
+                        aria-label="Category"
                       >
                         <FormControl>
-                          <SelectTrigger>
+                          <SelectTrigger id="category" aria-label="Category">
                             <SelectValue placeholder="Select a category" />
                           </SelectTrigger>
                         </FormControl>
                         <SelectContent>
-                          <SelectItem value="ALL">All Categories</SelectItem>
                           {Object.values(WidgetCategory).map((category) => (
                             <SelectItem key={category} value={category}>
                               {category}
@@ -188,9 +188,10 @@ export default function WidgetsPage() {
                   name="level"
                   render={({ field }: { field: ControllerRenderProps<CreateWidgetForm, 'level'> }) => (
                     <FormItem>
-                      <FormLabel>Level</FormLabel>
+                      <FormLabel htmlFor="level">Level</FormLabel>
                       <FormControl>
                         <Input
+                          id="level"
                           type="number"
                           {...field}
                           onChange={(e: ChangeEvent<HTMLInputElement>) =>
@@ -221,8 +222,9 @@ export default function WidgetsPage() {
         <Select
           value={filters.category || "ALL"}
           onValueChange={handleCategoryChange}
+          aria-label="Filter by category"
         >
-          <SelectTrigger className="w-[180px]">
+          <SelectTrigger className="w-[180px]" aria-label="Filter by category">
             <SelectValue placeholder="All Categories" />
           </SelectTrigger>
           <SelectContent>

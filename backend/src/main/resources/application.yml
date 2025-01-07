@@ -20,7 +20,14 @@ quarkus:
   # OpenAPI Configuration
   swagger-ui:
     always-include: true
-    path: /swagger-ui
+    path: /api/docs
+  smallrye-openapi:
+    path: /api/openapi
+    security-scheme: jwt
+    security-scheme-name: bearer
+    security-scheme-description: Bearer Authentication using JWT token from Supabase
+    jwt-security-scheme-value: bearer
+    jwt-bearer-format: JWT
 
   # Database configuration for Docker environment so that you can use "gradle quarkusDev" to run the app and connect to the dockerized database
   datasource:
