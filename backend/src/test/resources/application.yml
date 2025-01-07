@@ -22,8 +22,8 @@ quarkus:
     # Hibernate Configuration
   hibernate-orm:
     log:
-      sql: true
-      bind-parameters: true
+      sql: false
+      bind-parameters: false
 
     # Development Configuration
   log:

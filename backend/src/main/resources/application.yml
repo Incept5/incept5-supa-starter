@@ -13,6 +13,8 @@ quarkus:
   hibernate-orm:
     database:
       generation: none
+    log:
+      sql: false
     physical-naming-strategy: org.hibernate.boot.model.naming.CamelCaseToUnderscoresNamingStrategy
 
   # OpenAPI Configuration
@@ -35,6 +37,11 @@ quarkus:
     category:
       "org.incept5.api":
         level: DEBUG
+      "org.zalando.logbook":
+        level: TRACE
+        min-level: TRACE
+      "org.hibernate":
+        level: WARN 
     console:
       format: "%d{yyyy-MM-dd HH:mm:ss,SSS} %-5p [%c{3.}] (%t) %s%e%n" 
 

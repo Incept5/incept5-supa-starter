@@ -24,7 +24,7 @@ abstract class BaseAuthenticatedTest {
     @BeforeEach
     fun setup() {
         // debug logging for restassured
-        RestAssured.filters(RequestLoggingFilter(), ResponseLoggingFilter())
+        //RestAssured.filters(RequestLoggingFilter(), ResponseLoggingFilter())
         // Set default parser to JSON for all responses
         RestAssured.defaultParser = Parser.JSON
     }

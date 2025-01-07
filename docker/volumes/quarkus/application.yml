@@ -16,6 +16,7 @@ quarkus:
     category:
       "org.incept5.api":
         level: DEBUG
+        
 
 supabase:
   jwt:
