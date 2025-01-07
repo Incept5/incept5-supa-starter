@@ -48,7 +48,7 @@ export default function WidgetsPage() {
   const [searchTerm, setSearchTerm] = useState('')
   const debouncedSearch = useDebounce(searchTerm)
   
-  const filtersRef = React.useRef<WidgetFilters>({
+  const [filters, setFilters] = useState<WidgetFilters>({
     page: 0,
     size: 10,
   })
@@ -62,9 +62,9 @@ export default function WidgetsPage() {
     },
   })
 
-  const loadWidgets = useCallback(async () => {
+  const loadWidgets = useCallback(async (currentFilters: WidgetFilters) => {
     try {
-      const response = await widgetService.list(filtersRef.current)
+      const response = await widgetService.list(currentFilters)
       setWidgets(response.content)
       setTotalPages(response.totalPages)
     } catch (error) {
@@ -77,37 +77,44 @@ export default function WidgetsPage() {
   }, [toast])
 
   useEffect(() => {
-    filtersRef.current = {
-      ...filtersRef.current,
+    loadWidgets(filters)
+  }, [])
+
+  useEffect(() => {
+    const newFilters = {
+      ...filters,
       search: debouncedSearch || undefined,
       page: 0
     }
-    loadWidgets()
-  }, [debouncedSearch, loadWidgets])
+    setFilters(newFilters)
+    loadWidgets(newFilters)
+  }, [debouncedSearch])
 
   const handleCategoryChange = useCallback((value: string) => {
-    filtersRef.current = {
-      ...filtersRef.current,
+    const newFilters = {
+      ...filters,
       category: value === "ALL" ? undefined : value as WidgetCategory,
       page: 0,
     }
-    loadWidgets()
-  }, [loadWidgets])
+    setFilters(newFilters)
+    loadWidgets(newFilters)
+  }, [filters, loadWidgets])
 
   const handlePageChange = useCallback((newPage: number) => {
-    filtersRef.current = {
-      ...filtersRef.current,
+    const newFilters = {
+      ...filters,
       page: newPage,
     }
-    loadWidgets()
-  }, [loadWidgets])
+    setFilters(newFilters)
+    loadWidgets(newFilters)
+  }, [filters, loadWidgets])
 
   const onSubmit = async (data: CreateWidgetForm) => {
     try {
       await widgetService.create(data)
       setIsCreateDialogOpen(false)
       form.reset()
-      loadWidgets()
+      loadWidgets(filters)
       toast({
         title: 'Success',
         description: 'Widget created successfully',
@@ -212,7 +219,7 @@ export default function WidgetsPage() {
           onChange={(e: ChangeEvent<HTMLInputElement>) => setSearchTerm(e.target.value)}
         />
         <Select
-          value={filtersRef.current.category || "ALL"}
+          value={filters.category || "ALL"}
           onValueChange={handleCategoryChange}
         >
           <SelectTrigger className="w-[180px]">
@@ -246,15 +253,15 @@ export default function WidgetsPage() {
       <div className="mt-6 flex justify-center gap-2">
         <Button
           variant="outline"
-          onClick={() => handlePageChange(filtersRef.current.page! - 1)}
-          disabled={filtersRef.current.page === 0}
+          onClick={() => handlePageChange(filters.page! - 1)}
+          disabled={filters.page === 0}
         >
           Previous
         </Button>
         <Button
           variant="outline"
-          onClick={() => handlePageChange(filtersRef.current.page! + 1)}
-          disabled={filtersRef.current.page === totalPages - 1}
+          onClick={() => handlePageChange(filters.page! + 1)}
+          disabled={filters.page === totalPages - 1}
         >
           Next
         </Button>
